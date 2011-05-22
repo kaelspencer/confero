@@ -1,7 +1,7 @@
 #include "NetClientWriter.h"
 
 NetClientWriter::NetClientWriter(QTcpSocket * socket, QObject * parent)
-: m_socket(socket), QThread(parent), abort(false), mutex(0), m_data(0)
+: QThread(parent), m_socket(socket), m_data(0), mutex(0), abort(false)
 {
     mutex = new QMutex(QMutex::NonRecursive);
 }

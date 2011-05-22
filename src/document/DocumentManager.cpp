@@ -4,7 +4,7 @@ DocumentManager::DocumentManager(QTabWidget * tabWidget, QTabWidget * chatTab,
                                  QTreeWidget * treeWidget, ConferoNet * cnet,
                                  const QString & localHostName)
 : m_tabWidget(tabWidget), m_chatTab(chatTab), m_treeWidget(treeWidget), m_cnet(cnet),
-m_hostKeys(0), m_docs(0), m_chats(0), m_localHostName(localHostName)
+  m_localHostName(localHostName), m_hostKeys(0), m_docs(0), m_chats(0)
 {
     m_hostKeys = new QMap<QString, QList<unsigned int> *>();
     m_docs = new QMap<unsigned int, DocHolder *>();
@@ -103,7 +103,7 @@ bool DocumentManager::AddKey(unsigned int key, const QString & host)
 
 void DocumentManager::handleEdit(const char * data, size_t size, const QString & sender)
 {
-    Edit * ed = new Edit(data ,size);
+    Edit * ed = new Edit(data, size);
 
     if(ed->GetType() == CHAT_MESSAGE)
     {
@@ -146,6 +146,8 @@ void DocumentManager::UpdateTreeWidget()
 
 void DocumentManager::itemDoubleClicked(QTreeWidgetItem * item, int column)
 {
+    Q_UNUSED(column);
+
     if(item->text(0) == NEW_CONNECTION_STRING)
     {
         QDialog dialog;

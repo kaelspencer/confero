@@ -30,7 +30,7 @@ private:
 
 private slots:
     void handleEdit(const char * data, size_t size, const QString & sender);
-        void itemDoubleClicked(QTreeWidgetItem * item, int column);
+    void itemDoubleClicked(QTreeWidgetItem * item, int column);
     void tabCloseRequested(int index);
     void chatTabCloseRequested(int index);
 

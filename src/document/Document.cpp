@@ -87,7 +87,7 @@ void kDocument::calcPos(unsigned int pos, int & line, int & index)
     {
         QLinkedListIterator<QLinkedList<char> *> itor(*m_doc);
         QLinkedList<char> * l = 0;
-        int count = 0;
+        unsigned int count = 0;
         line = 0;
         index = 0;
 
@@ -143,7 +143,7 @@ void kDocument::insertAt(int line, int index, char ch)
     {
         return;
     }
-    else if(ch == char(13) && line < m_lines)
+    else if(ch == char(13) && line >= 0 && static_cast<unsigned int> (line) < m_lines)
     {
         QMutableLinkedListIterator<QLinkedList<char> *> itor(*m_doc);
         QLinkedList<char> * l = getLine(line, itor);
@@ -194,7 +194,7 @@ void kDocument::insertAt(int line, int index, char ch)
 
         m_chCount += 2;
     }
-    else if(line == m_lines && index >= 0)
+    else if(line >= 0 && static_cast<unsigned int> (line) == m_lines && index >= 0)
     {
         QLinkedList<char> * ll = new QLinkedList<char>();
         ll->append(ch);
@@ -203,7 +203,7 @@ void kDocument::insertAt(int line, int index, char ch)
         ++m_chCount;
         ++m_lines;
     }
-    else if(line >= 0 && line < m_lines && index >= 0)
+    else if(line >= 0 && static_cast<unsigned int> (line) < m_lines && index >= 0)
     {
         QLinkedList<char> * list = getLine(line);
 
@@ -241,7 +241,7 @@ void kDocument::removeAt(unsigned int pos, int & line, int & index)
 
 void kDocument::removeAt(int line, int index)
 {
-    if(line < m_lines)
+    if(line >= 0 && static_cast<unsigned int> (line) < m_lines)
     {
         //QMutableLinkedListIterator<QLinkedList<char> *> oitor(*m_doc);
         //QLinkedList<char> * pline = getLine(line, oitor);

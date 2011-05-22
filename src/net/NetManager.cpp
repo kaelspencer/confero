@@ -56,6 +56,9 @@ NetClient * NetManager::ConnectToHost(const QHostAddress & hostAddress)
 
 NetClient * NetManager::ConnectToHost(const QHostAddress & hostAddress, unsigned int key)
 {
+    //TODO: Investigate why key is unused, but we still send out SESSIONREQUEST
+    Q_UNUSED(key);
+
     HostID hid(hostAddress);
 
     if(!m_remoteHosts.contains(hid))

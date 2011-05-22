@@ -3,17 +3,20 @@
 Edit::Edit(const char * data, size_t size)
 : m_key(-1), m_value(), m_line(-1), m_index(-1), m_type(-1), m_length(0)
 {
-    const EditData * ed = reinterpret_cast<const EditData *> (data);
-    m_key = ed->key;
-    m_line = ed->line;
-    m_index = ed->index;
-    m_type = ed->type;
-    m_length = ed->length;
-
-    if(m_length > 0)
+    if(size >= sizeof(EditData))
     {
-        m_value = new char[m_length];
-        memcpy(m_value, data + sizeof(*ed), m_length);
+        const EditData * ed = reinterpret_cast<const EditData *> (data);
+        m_key = ed->key;
+        m_line = ed->line;
+        m_index = ed->index;
+        m_type = ed->type;
+        m_length = ed->length;
+
+        if(m_length > 0)
+        {
+            m_value = new char[m_length];
+            memcpy(m_value, data + sizeof(*ed), m_length);
+        }
     }
 }
 

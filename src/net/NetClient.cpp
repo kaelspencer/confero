@@ -125,11 +125,10 @@ void NetClient::PacketPump(const char * data, qint64 size)
     qint64 bused = 0;
     qint64 temp = 0;
     SessionManager * sm = SessionManager::Instance();
-    NetManager * cnet = sm->GetCNet();
 
     while(size - bused > 0)
     {
-        temp = ParsePacket(data + bused, sm, cnet);
+        temp = ParsePacket(data + bused, sm);
         bused += temp;
 
         if(temp == -1)
@@ -142,7 +141,7 @@ void NetClient::PacketPump(const char * data, qint64 size)
     }
 }
 
-qint64 NetClient::ParsePacket(const char * data, SessionManager * sm, NetManager * cnet)
+qint64 NetClient::ParsePacket(const char * data, SessionManager * sm)
 {
     qint64 bused = 0;
     const Header * hdr = reinterpret_cast<const Header *> (data);
@@ -152,7 +151,7 @@ qint64 NetClient::ParsePacket(const char * data, SessionManager * sm, NetManager
 
     switch((unsigned short)hdr->type)
     {
-    case SESSIONHOST:
+        case SESSIONHOST:
         {
             const SessionHosts * sh = reinterpret_cast<const SessionHosts *> (payload);
             bused += sizeof(SessionHosts);
@@ -167,7 +166,7 @@ qint64 NetClient::ParsePacket(const char * data, SessionManager * sm, NetManager
             }
             break;
         }
-    case SESSIONJOIN:
+        case SESSIONJOIN:
         {
             const SessionJoin * sj = reinterpret_cast<const SessionJoin *> (payload);
             bused += sizeof(SessionJoin);
@@ -175,9 +174,11 @@ qint64 NetClient::ParsePacket(const char * data, SessionManager * sm, NetManager
 
             break;
         }
-    case SESSIONOFFER:
+        case SESSIONOFFER:
         {
-            const SessionJoin * sj = reinterpret_cast<const SessionJoin *> (payload);
+            //TODO: Investigate why this is commented out.
+            //I don't remember why this was commented out.
+            //const SessionJoin * sj = reinterpret_cast<const SessionJoin *> (payload);
             bused += sizeof(SessionJoin);
             //sm->JoinExistingSession(sj->key, HostID(m_host));
 
@@ -186,12 +187,12 @@ qint64 NetClient::ParsePacket(const char * data, SessionManager * sm, NetManager
 
             break;
         }
-    case SESSIONREQUEST:
+        case SESSIONREQUEST:
         {
             SendKeys();
             break;
         }
-    case SESSIONS:
+        case SESSIONS:
         {
             const Sessions * ss = reinterpret_cast<const Sessions *> (payload);
             bused += HandleKeys(ss);
@@ -199,14 +200,14 @@ qint64 NetClient::ParsePacket(const char * data, SessionManager * sm, NetManager
 
             break;
         }
-    case SESSIONCOURTESY:
+        case SESSIONCOURTESY:
         {
             const Sessions * ss = reinterpret_cast<const Sessions *> (payload);
             bused += HandleKeys(ss);
 
             break;
         }
-    case MESSAGE:
+        case MESSAGE:
         {
             const Message * msg = reinterpret_cast<const Message *> (payload);
             bused += sizeof(Message);
@@ -216,7 +217,7 @@ qint64 NetClient::ParsePacket(const char * data, SessionManager * sm, NetManager
             emit dataReady(str);
             break;
         }
-    case EDIT:
+        case EDIT:
         {
             const EditStruct * ed = reinterpret_cast<const EditStruct *> (payload);
             bused += sizeof(EditStruct);
@@ -229,7 +230,7 @@ qint64 NetClient::ParsePacket(const char * data, SessionManager * sm, NetManager
 
             break;
         }
-    case ENCRYPTEDDATA:
+        case ENCRYPTEDDATA:
         {
                         throw("We received encrypted data. This should not happen.");
                         /*const EncHeader * ehdr = reinterpret_cast<const EncHeader *> (hdr);
@@ -251,7 +252,7 @@ qint64 NetClient::ParsePacket(const char * data, SessionManager * sm, NetManager
                         */
             break;
         }
-    case PUBLICKEY:
+        case PUBLICKEY:
         {
             const ConPublicKey * pk = reinterpret_cast<const ConPublicKey *> (payload);
             const char * ptr = reinterpret_cast<const char *> (payload + sizeof(ConPublicKey));
@@ -264,9 +265,9 @@ qint64 NetClient::ParsePacket(const char * data, SessionManager * sm, NetManager
 
             break;
         }
-    default:
-        bused = -1;
-        break;
+        default:
+            bused = -1;
+            break;
     }
 
     return bused;

@@ -15,6 +15,13 @@ SciWrapper::SciWrapper(QsciScintilla * sci, ConferoNet * cnet, unsigned int key)
 void SciWrapper::modified(int position, int type, const char * text, int length, int linesAdded,
                            int iline, int foldNow, int foldPrev, int token, int annotationLinesAdded)
 {
+    Q_UNUSED(linesAdded);
+    Q_UNUSED(iline);
+    Q_UNUSED(foldNow);
+    Q_UNUSED(foldPrev);
+    Q_UNUSED(token);
+    Q_UNUSED(annotationLinesAdded);
+
     if(!m_okToInsert)
     {
         return;

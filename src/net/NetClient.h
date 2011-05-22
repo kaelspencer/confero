@@ -33,7 +33,7 @@ private:
 
     void SendKeys(bool courtesy = false);
     qint64 HandleKeys(const Sessions * ss);
-    qint64 ParsePacket(const char * data, SessionManager * sm, NetManager * cnet);
+    qint64 ParsePacket(const char * data, SessionManager * sm);
     void PacketPump(const char * data, qint64 size);
     void SendPublicKey();
 
