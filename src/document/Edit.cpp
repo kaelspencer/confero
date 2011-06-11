@@ -5,6 +5,7 @@ Edit::Edit(const char * data, size_t size)
 {
     if(size >= sizeof(EditData))
     {
+        //I think the bytes are in reverse order
         const EditData * ed = reinterpret_cast<const EditData *> (data);
         m_key = ed->key;
         m_line = ed->line;

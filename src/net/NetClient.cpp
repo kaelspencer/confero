@@ -1,18 +1,15 @@
 #include "NetClient.h"
 
 NetClient::NetClient(const QHostAddress & hostAddress, quint16 port)
-: m_socket(0), m_host(hostAddress), m_port(port), /*m_enc(Encryption::Instance()),*/
-m_encryptionEnabled(true)
+: m_socket(0), m_host(hostAddress), m_port(port)
 {
     m_socket = new QTcpSocket();
-    SendPublicKey();
 }
 
 NetClient::NetClient(QTcpSocket * socket)
-: m_socket(socket), m_host(socket->peerAddress()), m_port(socket->peerPort()),
-/* m_enc(Encryption::Instance()), */m_encryptionEnabled(true)
+: m_socket(socket), m_host(socket->peerAddress()), m_port(socket->peerPort())
 {
-    SendPublicKey();
+
 }
 
 NetClient::~NetClient()
@@ -36,7 +33,6 @@ void NetClient::Connect()
     {
         m_socket->abort();
         m_socket->connectToHost(m_host, m_port);
-        SendPublicKey();
     }
 }
 
@@ -68,36 +64,7 @@ void NetClient::Write(const QByteArray & block)
 
 void NetClient::WriteRawData(const char * data, unsigned short size)
 {
-        /*if(m_encryptionEnabled)
-    {
-        size_t esize = size;
-        char * eptr = m_enc->Encrypt(data, esize, m_host);
-
-        if(eptr && esize)
-        {
-            EncHeader ehdr;
-            size = sizeof(ehdr) + esize;
-            ehdr.type = ENCRYPTEDDATA;
-            ehdr.length = size;
-
-            char * ptr = new char[size];
-            memcpy_s(ptr, size, &ehdr, sizeof(ehdr));
-            memcpy_s(ptr + sizeof(ehdr), size - sizeof(ehdr), eptr, esize);
-
-            m_socket->write(ptr, size);
-
-            delete [] ptr;
-            delete [] eptr;
-        }
-        else //write unencrypted data
-        {
-            m_socket->write(data, size);
-        }
-    }
-        else*/
-    {
-        m_socket->write(data, size);
-    }
+    m_socket->write(data, size);
 }
 
 void NetClient::WritePacket(const Packet * pkt)
@@ -116,7 +83,6 @@ void NetClient::Read()
     if(bytesRead > 0)
     {
         PacketPump(data, bytesRead);
-        //ParsePacket(data, bytesRead);
     }
 }
 
@@ -133,11 +99,9 @@ void NetClient::PacketPump(const char * data, qint64 size)
 
         if(temp == -1)
         {
-            //something happened, probably with encryption
+            //something happened
             return;
         }
-
-        //bused += ParsePacket(data + bused, sm, cnet);
     }
 }
 
@@ -230,41 +194,6 @@ qint64 NetClient::ParsePacket(const char * data, SessionManager * sm)
 
             break;
         }
-        case ENCRYPTEDDATA:
-        {
-                        throw("We received encrypted data. This should not happen.");
-                        /*const EncHeader * ehdr = reinterpret_cast<const EncHeader *> (hdr);
-            size_t size = ehdr->length - sizeof(ehdr);
-
-            const char * eptr = reinterpret_cast<const char *> ((const char*)ehdr + sizeof(ehdr));
-            char * dptr = m_enc->Decrypt(eptr, size);
-            bused = ehdr->length;
-
-            //parse the decrypted packet
-            bool parseOk = (ParsePacket(dptr, sm, cnet) == -1 ? false : true);
-
-            delete [] dptr;
-
-            if(!parseOk)
-            {
-                bused = -1;
-            }
-                        */
-            break;
-        }
-        case PUBLICKEY:
-        {
-            const ConPublicKey * pk = reinterpret_cast<const ConPublicKey *> (payload);
-            const char * ptr = reinterpret_cast<const char *> (payload + sizeof(ConPublicKey));
-
-            string key(ptr, pk->length);
-            //m_enc->AddKey(m_host, key);
-
-            bused += pk->length;
-            bused += sizeof(ConPublicKey);
-
-            break;
-        }
         default:
             bused = -1;
             break;
@@ -338,29 +267,4 @@ qint64 NetClient::HandleKeys(const Sessions * ss)
     }
 
     return bused;
-}
-
-void NetClient::SendPublicKey()
-{
-/*	string key(m_enc->GetPublicKey());
-    Header hdr;
-    hdr.type = PUBLICKEY;
-
-    ConPublicKey pk;
-    pk.length = key.length();
-
-    char * ptr = new char[pk.length];
-        //memcpy_s(ptr, pk.length, key.c_str(), pk.length);
-        memcpy(ptr, key.c_str(), pk.length);
-
-    Packet * pkt = new Packet();
-    pkt->Add((char*) &hdr, sizeof(hdr));
-    pkt->Add((char*) &pk, sizeof(pk));
-    pkt->Add(ptr, pk.length);
-
-    this->WritePacket(pkt);
-
-    delete pkt;
-    delete [] ptr;
-        */
 }

@@ -8,7 +8,6 @@
 #include "NetServer.h"
 #include "PacketDefs.h"
 #include "Packet.h"
-#include "../Encryption.h"
 
 #include <string>
 using std::string;
@@ -24,8 +23,6 @@ private:
     QTcpSocket * m_socket;
     QHostAddress m_host;
     quint16 m_port;
-        //Encryption * m_enc;
-    bool m_encryptionEnabled;
 
     NetClient();
     NetClient(const NetClient & rhs);
@@ -35,7 +32,6 @@ private:
     qint64 HandleKeys(const Sessions * ss);
     qint64 ParsePacket(const char * data, SessionManager * sm);
     void PacketPump(const char * data, qint64 size);
-    void SendPublicKey();
 
 public:
     NetClient(QTcpSocket * socket);

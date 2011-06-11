@@ -11,7 +11,6 @@ UI_DIR = .qtSol
 SOURCES += \
     src/Random.cpp \
     src/main.cpp \
-    src/Encryption.cpp \
     src/confero.cpp \
     src/document/SciWrapper.cpp \
     src/document/Edit.cpp \
@@ -30,7 +29,6 @@ SOURCES += \
     src/net/ConferoNet.cpp
 HEADERS += \
     src/Random.h \
-    src/Encryption.h \
     src/confero.h \
     src/document/SciWrapper.h \
     src/document/Edit.h \

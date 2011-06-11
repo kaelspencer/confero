@@ -1,16 +1,14 @@
 #ifndef PACKETDEFS_H
 #define PACKETDEFS_H
 
-#define SESSIONHOST		0x10	//receiving a list of hosts in a session
-#define SESSIONJOIN		0x11	//confirmation of joining a session
-#define SESSIONOFFER	0x12	//remote host is offering a session key
-#define SESSIONREQUEST	0x15	//a request for all available keys
-#define MESSAGE			0x20	//a string message
-#define SESSIONS		0x30	//a list of all available keys; response to SESSIONREQUEST
+#define SESSIONHOST     0x10	//receiving a list of hosts in a session
+#define SESSIONJOIN     0x11	//confirmation of joining a session
+#define SESSIONOFFER    0x12	//remote host is offering a session key
+#define SESSIONREQUEST  0x15	//a request for all available keys
+#define MESSAGE         0x20	//a string message
+#define SESSIONS        0x30	//a list of all available keys; response to SESSIONREQUEST
 #define SESSIONCOURTESY 0x31	//a list of all available keys; this isn't a response
-#define EDIT			0x40	//an edit in qscintilla
-#define ENCRYPTEDDATA	0x50	//an encrypted message
-#define PUBLICKEY		0x55	//the sender's public key
+#define EDIT            0x40	//an edit in qscintilla
 
 typedef struct
 {
