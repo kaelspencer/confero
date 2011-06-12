@@ -187,7 +187,7 @@ qint64 NetClient::ParsePacket(const char * data, SessionManager * sm)
             bused += sizeof(EditStruct);
             char * data = new char[ed->size];
 
-            memcpy(data, ((char*)ed) + sizeof(ed), ed->size);
+            memcpy(data, ((char*)ed) + sizeof(*ed), ed->size);
             bused += ed->size;
 
             emit editReady(data, ed->size, m_host.toString());

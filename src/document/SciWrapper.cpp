@@ -97,11 +97,11 @@ void SciWrapper::integrateEdit(Edit * ed)
         //we need to check to see if the edit was before the current cursor position
         //if it is, then we need to adjust the new position.
         int line = 0, index = 0;
-        m_sci->getCursorPosition(&line, &index);
         m_okToInsert = false;
+        m_sci->getCursorPosition(&line, &index);
         m_sci->setText(m_doc->Text());
-        m_okToInsert = true;
         m_sci->setCursorPosition(line, index);
+        m_okToInsert = true;
     }
     else
     {
